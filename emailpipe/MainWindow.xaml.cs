@@ -1,7 +1,9 @@
-﻿using System;
+﻿using emailpipe.ApiRepo;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,10 +23,21 @@ namespace emailpipe
     /// </summary>
     public partial class MainWindow : Window
     {
+        private katak _katakApi;
+        private OsTicket _osTicket;
         private ObservableCollection<ListViewItem> _emailList = new ObservableCollection<ListViewItem>();
         public MainWindow()
         {
             InitializeComponent();
+
+            //_katakApi = new katak();
+            //_katakApi.ApiPath = "http://your.tld/ticket/api/tickets.email";
+            //_katakApi.ApiKey1 = "01E0900582B8215CFB6230AF05B27BDA";
+
+            _osTicket = new OsTicket();
+            _osTicket.ApiKey1 = "4A29909545187D793821BA05A99E2F99";
+            _osTicket.ApiPath = "http://your.tld/ticket/api/http.php/tickets.json";
+
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -49,6 +62,8 @@ namespace emailpipe
             StartListen();
             EmailListView.Opacity = 0.7;
 
+            _emailList.CollectionChanged += _emailList_CollectionChanged;
+
             Canvas test = new Canvas();
             test.Background = Brushes.Orange;
             test.Children.Add(new TextBlock { Text = "Simple email pipe for helpdesks", FontWeight = FontWeights.UltraBlack});
@@ -58,6 +73,43 @@ namespace emailpipe
             MainGrid.Children.Add(test);
 
             AddControllerButtons();
+        }
+
+        private void _emailList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
+                    {
+                        foreach (var item in e.NewItems)
+                        {
+
+                            if (!(item is ListViewItem))
+                                return;
+
+                            ListViewItem listViewItem = (ListViewItem)item;
+
+                            if (!(listViewItem.Tag is MailMessage))
+                                return;
+
+                            if (_katakApi != null)
+                                _katakApi.AddnewTicket((MailMessage)listViewItem.Tag);
+                            else if (_osTicket != null)
+                                _osTicket.AddnewTicket((MailMessage)listViewItem.Tag);
+                        }
+                        break;
+                    }
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void AddControllerButtons()
@@ -105,11 +157,8 @@ namespace emailpipe
 
         private void StartListen()
         {
-            imap imap = new imap("localhost", 143, "test@localhost.com", "password", _emailList);
+            imap imap = new imap("localhost", 143, "test@test.tld.com", "password", _emailList);
             imap.Listen();
         }
-
-        
-         
     }
 }

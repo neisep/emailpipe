@@ -54,6 +54,7 @@ namespace emailpipe
                 catch (Exception crap)
                 {
                     //TODO FIX SOME ERROR CODE OR SOMETHING HERE!
+                    //Listen();
                 }
 
             });
@@ -91,16 +92,17 @@ namespace emailpipe
 
             Application.Current.Dispatcher.Invoke((Action)delegate
             {
-                ListViewItem test = new ListViewItem();
+                ListViewItem listViewItem = new ListViewItem();
 
                 string emailDate = DateTime.Now.ToString();
                 if (eml.Date() != null)
                     emailDate = ((DateTime)eml.Date()).ToString("yyyy-MM-dd HH:mm:ss");
 
-                test.Content = new EmailListViewItem { Subject = eml.Subject, Date = emailDate };
-                _emailListViewItem.Add(test);
-            });
+                listViewItem.Content = new EmailListViewItem { Subject = eml.Subject, Date = emailDate };
+                listViewItem.Tag = eml;
+                _emailListViewItem.Add(listViewItem);
 
+            });
         }
     }
 
