@@ -1,5 +1,7 @@
 # emailpipe
 
+[![Build status](https://ci.appveyor.com/api/projects/status/3a23vfunofblcxh5?svg=true)](https://ci.appveyor.com/project/neisep/emailpipe)
+
 An email pipe for Support desk.
 
 
