@@ -4,17 +4,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace emailpipe
 {
@@ -49,7 +42,7 @@ namespace emailpipe
             MainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(30, GridUnitType.Star) });
             MainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100, GridUnitType.Star) });
 
-            MainGrid.Background = Brushes.Pink;
+            //MainGrid.Background = Brushes.Black;
 
             GridView gridView = new GridView();
             gridView.Columns.Add(new GridViewColumn { Header = "Subject", Width = 250, DisplayMemberBinding = new Binding("Subject") });
@@ -64,13 +57,13 @@ namespace emailpipe
 
             _emailList.CollectionChanged += _emailList_CollectionChanged;
 
-            Canvas test = new Canvas();
-            test.Background = Brushes.Orange;
-            test.Children.Add(new TextBlock { Text = "Simple email pipe for helpdesks", FontWeight = FontWeights.UltraBlack});
+            Canvas borderCanvas = new Canvas();
+            borderCanvas.Background = Brushes.Orange;
+            borderCanvas.Children.Add(new TextBlock { Text = "Simple email pipe for helpdesks", FontWeight = FontWeights.UltraBlack});
             
-            test.SetValue(Grid.ColumnSpanProperty, 2);
+            borderCanvas.SetValue(Grid.ColumnSpanProperty, 2);
 
-            MainGrid.Children.Add(test);
+            MainGrid.Children.Add(borderCanvas);
 
             AddControllerButtons();
         }
@@ -115,6 +108,10 @@ namespace emailpipe
         private void AddControllerButtons()
         {
             Grid grid = new Grid();
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(50, GridUnitType.Star) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
+
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50, GridUnitType.Star) });
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50, GridUnitType.Star) });
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50, GridUnitType.Star) });
@@ -133,19 +130,23 @@ namespace emailpipe
             Button refreshButton = new Button();
             refreshButton.Content = "Refresh list";
             refreshButton.SetValue(Grid.RowProperty, 1);
+            refreshButton.SetValue(Grid.ColumnProperty, 1);
 
             Button resendToIntegrationButton = new Button();
             resendToIntegrationButton.Content = new TextBlock { Text = "Upload to integration", TextWrapping = TextWrapping.Wrap };
             resendToIntegrationButton.SetValue(Grid.RowSpanProperty, 2);
             resendToIntegrationButton.SetValue(Grid.RowProperty, 2);
+            resendToIntegrationButton.SetValue(Grid.ColumnProperty, 1);
 
             Button clearButton = new Button();
             clearButton.Content = "Clear list";
             clearButton.SetValue(Grid.RowProperty, 9);
+            clearButton.SetValue(Grid.ColumnProperty, 1);
 
             Button settingsButton = new Button();
             settingsButton.Content = "Settings";
             settingsButton.SetValue(Grid.RowProperty, 8);
+            settingsButton.SetValue(Grid.ColumnProperty, 1);
 
             grid.Children.Add(resendToIntegrationButton);
             grid.Children.Add(refreshButton);
@@ -157,8 +158,9 @@ namespace emailpipe
 
         private void StartListen()
         {
-            imap imap = new imap("localhost", 143, "test@test.tld.com", "password", _emailList);
+            imap imap = new imap("localhost", 143, "test@your.tld", "blablabla", _emailList);
             imap.Listen();
+
         }
     }
 }
