@@ -1,19 +1,14 @@
-﻿using MailKit;
-using MailKit.Net.Imap;
+﻿using MailKit.Net.Imap;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace emailpipe
 {
-    public class Imap_idle
+    public class ImapIdle
     {
-        private ImapClient _imapClient;
-        private MailManager _mailManager;
-        public Imap_idle(ImapClient imapClient, MailManager mailManager)
+        private readonly ImapClient _imapClient;
+        private readonly MailManager _mailManager;
+        public ImapIdle(ImapClient imapClient, MailManager mailManager)
         {
             _imapClient = imapClient;
             _mailManager = mailManager;
@@ -46,7 +41,7 @@ namespace emailpipe
         private void Inbox_MessagesArrived(object sender, MailKit.MessagesArrivedEventArgs e)
         {
             //TODO ADD SOME KIND OF METHOD TO QUE UP MAIL BECAUSE IT WILL MOST PROBOBLY FAIL TO MAKE 2098945 millions connection at the same time.
-            _mailManager.NewMessageSignal();
+            _mailManager.NewMessageSignal(_imapClient);
         }
     }
 }

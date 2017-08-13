@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
-using System.Net.Mail;
 using System.Windows;
 using System.IO;
 using System.Windows.Controls;
@@ -10,12 +9,15 @@ using MailKit.Net.Imap;
 using MailKit;
 using System.Threading;
 using System.Linq;
+using emailpipe.Helper;
+using emailpipe.ApiRepo;
+using MimeKit;
 
 namespace emailpipe
 {
-    public class imap
+    public class Imap
     {
-        private ObservableCollection<IMessageSummary> _observableCollectionEmails;
+        private ObservableCollection<MimeMessage> _observableCollectionEmails;
 
         private ObservableCollection<ListViewItem> _emailListViewItem;
         private string _ip;
@@ -23,35 +25,44 @@ namespace emailpipe
         private string _username;
         private string _password;
         private MailManager _mailManager;
-        public imap(string ip, int port, string username, string password, ObservableCollection<ListViewItem> emailListViewItem)
+        public Imap(string ip, int port, string username, string password, ObservableCollection<ListViewItem> emailListViewItem)
         {
             _ip = ip;
             _port = port;
             _username = username;
             _password = password;
             _emailListViewItem = emailListViewItem;
-            _observableCollectionEmails = new ObservableCollection<IMessageSummary>();
+            _observableCollectionEmails = new ObservableCollection<MimeMessage>();
             _observableCollectionEmails.CollectionChanged += _observableCollectionEmails_CollectionChanged;
+        }
+
+        public void StartMailManager(Imap imap, ApiRepoBase apihelpdesk)
+        {
+            _mailManager = new MailManager(_observableCollectionEmails, imap);
         }
 
         public void Listen()
         {
-            _mailManager = new MailManager(_observableCollectionEmails);
-
-            Task imapFetchTask = ImapTask(ImapType.Fetch, _mailManager);
-            Task imapIdleTask = ImapTask(ImapType.Idle, _mailManager);
+            var imapFetchTask = ImapTask(ImapType.Fetch, _mailManager);
+            var imapIdleTask = ImapTask(ImapType.Idle, _mailManager);
 
             imapIdleTask.Start();
             imapFetchTask.Start();
         }
 
-        private Task ImapTask(ImapType imapType, MailManager mailManager)
+        public void FetchNewMail()
+        {
+            var imapFetchTask = ImapTask(ImapType.Fetch, _mailManager);
+            imapFetchTask.Start();
+        }
+
+        public Task ImapTask(ImapType imapType, MailManager mailManager)
         {
             return new Task(() =>
             {
                 try
                 {
-                    using (ImapClient imapClient = new ImapClient(new ProtocolLogger(Console.OpenStandardError())))
+                    using (var imapClient = new ImapClient(new ProtocolLogger(Console.OpenStandardError())))
                     {
                         // Remove the XOAUTH2 authentication mechanism since we don't have an OAuth2 token.
                         imapClient.AuthenticationMechanisms.Remove("XOAUTH2");
@@ -59,7 +70,8 @@ namespace emailpipe
                         imapClient.Connect(_ip, _port, MailKit.Security.SecureSocketOptions.None);
                         imapClient.Authenticate(_username, _password);
 
-                        imapClient.Inbox.Open(FolderAccess.ReadOnly);
+                        var inbox = imapClient.Inbox;
+                        inbox.Open(FolderAccess.ReadOnly);
 
                         if (!imapClient.Capabilities.HasFlag(ImapCapabilities.Idle))
                         {
@@ -67,20 +79,25 @@ namespace emailpipe
                             return;
                         }
 
-                        if (imapType == ImapType.Fetch)
+                        switch (imapType)
                         {
-                            Imap_fetch imapFetch = new Imap_fetch(imapClient);
-                            mailManager.AddMailToCollection(imapFetch.ReceiveMails());
-                        }
-                        else if(imapType == ImapType.Idle)
-                        {
-                            Imap_idle imapIdle = new Imap_idle(imapClient, _mailManager);
-                            imapIdle.Listen();
-
-                            while(imapClient.IsConnected)
+                            case ImapType.Fetch:
                             {
-                                Thread.Sleep(100);
+                                var imapFetch = new ImapFetch(imapClient, inbox);
+                                mailManager.AddMailToCollection(imapFetch.ReceiveMails());
                             }
+                                break;
+                            case ImapType.Idle:
+                            {
+                                var imapIdle = new ImapIdle(imapClient, _mailManager);
+                                imapIdle.Listen();
+
+                                while (imapClient.IsConnected)
+                                {
+                                    Thread.Sleep(100);
+                                }
+                            }
+                                break;
                         }
                     }
                 }
@@ -115,49 +132,6 @@ namespace emailpipe
             });
         }
 
-        //private void ImapClient_NewMessage(object sender, IdleMessageEventArgs e)
-        //{
-        //    MailMessage eml = e.Client.GetMessage(e.MessageUID, FetchOptions.Normal);
-        //    var header = eml.Headers;
-
-        //    StringBuilder messageString = new StringBuilder();
-
-        //    //Puts together the header.
-        //    for (int i = 0; i < header.Count; i++)
-        //    {
-        //        messageString.Append("" + header.Keys[i] + ": " + header[i].ToString() + "");
-        //        messageString.AppendLine();
-        //    }
-
-        //    messageString.AppendLine();
-        //    messageString.Append(eml.Body);
-
-        //    var data = Encoding.ASCII.GetBytes(messageString.ToString());
-
-        //    var runningDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-        //    runningDir = runningDir + "\\emails";
-
-        //    if (!System.IO.Directory.Exists(runningDir))
-        //        System.IO.Directory.CreateDirectory(runningDir);
-
-        //    string fileName = string.Format("{1}\\email_{0}.eml", e.MessageUID, runningDir);
-        //    File.WriteAllBytes(fileName, data);
-
-        //    Application.Current.Dispatcher.Invoke((Action)delegate
-        //    {
-        //        ListViewItem listViewItem = new ListViewItem();
-
-        //        string emailDate = DateTime.Now.ToString();
-        //        if (eml.Date() != null)
-        //            emailDate = ((DateTime)eml.Date()).ToString("yyyy-MM-dd HH:mm:ss");
-
-        //        listViewItem.Content = new EmailListViewItem { Subject = eml.Subject, Date = emailDate };
-        //        listViewItem.Tag = eml;
-        //        _emailListViewItem.Add(listViewItem);
-
-        //    });
-        //}
-
        /// <summary>
        /// If we receive any new email it will be added here.
        /// </summary>
@@ -165,29 +139,39 @@ namespace emailpipe
        /// <param name="e"></param>
         private void _observableCollectionEmails_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            switch (e.Action)
+            try
             {
-                case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
-                    break;
-                case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
-                    break;
-                case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
-                    break;
-                case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
-                    break;
-                case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                    break;
-                default:
-                    break;
+                switch (e.Action)
+                {
+                    case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
+                        foreach (var item in e.NewItems.OfType<MimeMessage>())
+                        {
+                            Application.Current.Dispatcher.Invoke((Action)delegate
+                            {
+                                var listViewItem = HelperListView.ConvertToListViewItem<MimeMessage>(item);
+                                if (listViewItem != null)
+                                    _emailListViewItem.Add(listViewItem);
+                            });
+                        }
+                        break;
+                    case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
+                        break;
+                    case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
+                        break;
+                    case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
+                        break;
+                    case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                //TODO Handle errors here!
             }
         }
 
-    }
-
-    public class EmailListViewItem
-    {
-        public string Subject { get; set; }
-        public string Date { get; set; }
     }
 
     public enum ImapType

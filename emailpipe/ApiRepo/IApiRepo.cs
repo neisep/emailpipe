@@ -1,11 +1,11 @@
-﻿using System.Net.Mail;
+﻿using MimeKit;
 
 namespace emailpipe.ApiRepo
 {
     public interface IApiRepo
     {
-        void AddnewTicket(MailMessage eml);
-        void CloseTicket(MailMessage eml);
-        void UpdateTicket(MailMessage eml);
+        void AddnewTicket(MimeMessage eml);
+        void CloseTicket(MimeMessage eml);
+        void UpdateTicket(MimeMessage eml);
     }
 }

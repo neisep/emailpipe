@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MimeKit;
+using System;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Net.Mail;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace emailpipe.ApiRepo
 {
@@ -22,7 +18,7 @@ namespace emailpipe.ApiRepo
 
         public override string ApiPath { get; set; }
 
-        public override void AddnewTicket(MailMessage eml)
+        public override void AddnewTicket(MimeMessage eml)
         {
             try
             {
@@ -48,12 +44,12 @@ namespace emailpipe.ApiRepo
 
         }
 
-        public override void CloseTicket(MailMessage eml)
+        public override void CloseTicket(MimeMessage eml)
         {
             throw new NotImplementedException();
         }
 
-        public override void UpdateTicket(MailMessage eml)
+        public override void UpdateTicket(MimeMessage eml)
         {
             throw new NotImplementedException();
         }

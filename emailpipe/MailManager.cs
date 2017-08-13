@@ -1,4 +1,6 @@
-﻿using MailKit;
+﻿using emailpipe.ApiRepo;
+using MailKit.Net.Imap;
+using MimeKit;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,31 +12,35 @@ namespace emailpipe
 {
     public class MailManager
     {
-        private ObservableCollection<IMessageSummary> _observableCollectionEmails;
-        public MailManager(ObservableCollection<IMessageSummary> observableCollectionEmails)
+        private readonly Imap _imap;
+        private ObservableCollection<MimeMessage> _observableCollectionEmails;
+        public MailManager(ObservableCollection<MimeMessage> observableCollectionEmails, Imap imap)
         {
             _observableCollectionEmails = observableCollectionEmails;
+            _imap = imap;
         }
 
         /// <summary>
         /// Adds new mail from Inbox with new client connection.
         /// </summary>
         /// <param name="mailList"></param>
-        public void AddMailToCollection(List<IMessageSummary> mailList)
+        public void AddMailToCollection(List<MimeMessage> mailList)
         {
-            foreach (IMessageSummary mail in mailList)
+            foreach (var mail in mailList)
             {
-                _observableCollectionEmails.Add(mail);
+                if (_observableCollectionEmails.All(i => i.MessageId != mail.MessageId))
+                {
+                    _observableCollectionEmails.Add(mail);
+                }
             }
         }
 
         /// <summary>
         /// Signal from ImapIdle Client lets start task to fetch new email with new connection.
         /// </summary>
-        public void NewMessageSignal()
+        public void NewMessageSignal(ImapClient imapClient)
         {
-            //TODO ADD SOME KND OF METHOD HERE THAT WILL FETCH NEW EMAILS
+                _imap?.FetchNewMail();
         }
-
     }
 }

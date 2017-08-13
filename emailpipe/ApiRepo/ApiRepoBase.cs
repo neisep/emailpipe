@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MimeKit;
 
 namespace emailpipe.ApiRepo
 {
@@ -15,8 +10,8 @@ namespace emailpipe.ApiRepo
         public abstract string ApiKey3 { get; set; }
         public abstract string ApiKey4 { get; set; }
 
-        public abstract void AddnewTicket(MailMessage eml);
-        public abstract void CloseTicket(MailMessage eml);
-        public abstract void UpdateTicket(MailMessage eml);
+        public abstract void AddnewTicket(MimeMessage eml);
+        public abstract void CloseTicket(MimeMessage eml);
+        public abstract void UpdateTicket(MimeMessage eml);
     }
 }

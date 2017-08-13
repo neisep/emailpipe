@@ -1,9 +1,7 @@
 ﻿using emailpipe.ApiRepo;
+using MimeKit;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net.Mail;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,23 +12,19 @@ namespace emailpipe
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-        private katak _katakApi;
-        private OsTicket _osTicket;
+        private readonly ApiRepoBase _apihelpdesk;
         private ObservableCollection<ListViewItem> _emailList = new ObservableCollection<ListViewItem>();
         public MainWindow()
         {
             InitializeComponent();
 
-            //_katakApi = new katak();
-            //_katakApi.ApiPath = "http://your.tld/ticket/api/tickets.email";
-            //_katakApi.ApiKey1 = "01E0900582B8215CFB6230AF05B27BDA";
-
-            _osTicket = new OsTicket();
-            _osTicket.ApiKey1 = "4A29909545187D793821BA05A99E2F99";
-            _osTicket.ApiPath = "http://your.tld/ticket/api/http.php/tickets.json";
-
+            _apihelpdesk = new OsTicket()
+            {
+                ApiKey1 = "4A29909545187D793821BA05A99E2F99",
+                ApiPath = "http://your.tld/ticket/api/http.php/tickets.json",
+            };
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -57,8 +51,7 @@ namespace emailpipe
 
             _emailList.CollectionChanged += _emailList_CollectionChanged;
 
-            Canvas borderCanvas = new Canvas();
-            borderCanvas.Background = Brushes.Orange;
+            var borderCanvas = new Canvas {Background = Brushes.Orange};
             borderCanvas.Children.Add(new TextBlock { Text = "Simple email pipe for helpdesks", FontWeight = FontWeights.UltraBlack});
             
             borderCanvas.SetValue(Grid.ColumnSpanProperty, 2);
@@ -76,19 +69,15 @@ namespace emailpipe
                     {
                         foreach (var item in e.NewItems)
                         {
-
-                            if (!(item is ListViewItem))
+                            if (item != null && !(item is ListViewItem))
                                 return;
 
-                            ListViewItem listViewItem = (ListViewItem)item;
+                            var listViewItem = (ListViewItem)item;
 
-                            if (!(listViewItem.Tag is MailMessage))
+                            if (!(listViewItem?.Tag is MimeMessage))
                                 return;
 
-                            if (_katakApi != null)
-                                _katakApi.AddnewTicket((MailMessage)listViewItem.Tag);
-                            else if (_osTicket != null)
-                                _osTicket.AddnewTicket((MailMessage)listViewItem.Tag);
+                            _apihelpdesk?.AddnewTicket((MimeMessage)listViewItem.Tag);
                         }
                         break;
                     }
@@ -100,14 +89,12 @@ namespace emailpipe
                     break;
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
                     break;
-                default:
-                    break;
             }
         }
 
         private void AddControllerButtons()
         {
-            Grid grid = new Grid();
+            var grid = new Grid();
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(50, GridUnitType.Star) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
@@ -127,24 +114,23 @@ namespace emailpipe
             grid.SetValue(Grid.RowProperty, 2);
 
 
-            Button refreshButton = new Button();
-            refreshButton.Content = "Refresh list";
+            var refreshButton = new Button {Content = "Refresh list"};
             refreshButton.SetValue(Grid.RowProperty, 1);
             refreshButton.SetValue(Grid.ColumnProperty, 1);
 
-            Button resendToIntegrationButton = new Button();
-            resendToIntegrationButton.Content = new TextBlock { Text = "Upload to integration", TextWrapping = TextWrapping.Wrap };
+            var resendToIntegrationButton = new Button
+            {
+                Content = new TextBlock {Text = "Upload to integration", TextWrapping = TextWrapping.Wrap}
+            };
             resendToIntegrationButton.SetValue(Grid.RowSpanProperty, 2);
             resendToIntegrationButton.SetValue(Grid.RowProperty, 2);
             resendToIntegrationButton.SetValue(Grid.ColumnProperty, 1);
 
-            Button clearButton = new Button();
-            clearButton.Content = "Clear list";
+            var clearButton = new Button {Content = "Clear list"};
             clearButton.SetValue(Grid.RowProperty, 9);
             clearButton.SetValue(Grid.ColumnProperty, 1);
 
-            Button settingsButton = new Button();
-            settingsButton.Content = "Settings";
+            var settingsButton = new Button {Content = "Settings"};
             settingsButton.SetValue(Grid.RowProperty, 8);
             settingsButton.SetValue(Grid.ColumnProperty, 1);
 
@@ -158,7 +144,8 @@ namespace emailpipe
 
         private void StartListen()
         {
-            imap imap = new imap("localhost", 143, "test@your.tld", "blablabla", _emailList);
+            var imap = new Imap("localhost", 143, "test@your.tld", "blablabla", _emailList);
+            imap.StartMailManager(imap, _apihelpdesk);
             imap.Listen();
 
         }

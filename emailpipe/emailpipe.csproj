@@ -84,6 +84,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helper\ListView.cs" />
     <Compile Include="Imap\imap.cs" />
     <Compile Include="Imap\imap_fetch.cs" />
     <Compile Include="Imap\imap_idle.cs" />
