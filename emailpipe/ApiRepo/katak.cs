@@ -16,13 +16,13 @@ namespace emailpipe.ApiRepo
 
         public override string ApiKey4 { get; set; }
 
-        public override string ApiPath { get; set; }
+        public override string ApiAdress { get; set; }
 
         public override void AddnewTicket(MimeMessage eml)
         {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiPath);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ApiAdress);
                 request.UserAgent = ApiKey1;
                 request.Method = "POST";
                 request.ContentType = "text/plain; charset=UTF-8;";

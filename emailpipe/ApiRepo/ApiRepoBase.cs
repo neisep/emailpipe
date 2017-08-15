@@ -4,7 +4,7 @@ namespace emailpipe.ApiRepo
 {
     public abstract class ApiRepoBase : IApiRepo
     {
-        public abstract string ApiPath { get; set; }
+        public abstract string ApiAdress { get; set; }
         public abstract string ApiKey1 { get; set; }
         public abstract string ApiKey2 { get; set; }
         public abstract string ApiKey3 { get; set; }

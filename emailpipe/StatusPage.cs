@@ -16,10 +16,16 @@ namespace emailpipe
         public StatusPage()
         {
             EmailListView = new ListView();
+
+            EmailListView.SetValue(Grid.ColumnProperty, 1);
+            EmailListView.SetValue(Grid.RowProperty, 2);
         }
 
         public FrameworkElement GenerateContent()
         {
+            if (EmailListView.View != null)
+                return EmailListView;
+
             var gridView = new GridView();
             gridView.Columns.Add(new GridViewColumn { Header = "Subject", Width = 250, DisplayMemberBinding = new Binding("Subject") });
             gridView.Columns.Add(new GridViewColumn { Header = "Date", Width = 80, DisplayMemberBinding = new Binding("Date") });

@@ -19,7 +19,7 @@ namespace emailpipe.ApiRepo
 
         public override string ApiKey4 { get; set; }
 
-        public override string ApiPath { get; set; }
+        public override string ApiAdress { get; set; }
 
         public override void AddnewTicket(MimeMessage eml)
         {
@@ -30,7 +30,7 @@ namespace emailpipe.ApiRepo
                 client.Headers.Add("Expect", string.Empty);
                 client.Headers.Add("User-Agent", "emailPipe");
 
-                client.UploadString(ApiPath, "POST", CreateTicketJSON(eml));
+                client.UploadString(ApiAdress, "POST", CreateTicketJSON(eml));
             }
             catch(Exception ex)
             {

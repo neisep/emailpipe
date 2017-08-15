@@ -18,6 +18,8 @@ namespace emailpipe
         private StatusPage _statusPage;
         private SettingsPage _settingsPage;
 
+        private UIElement _activeUiElement;
+
         private readonly ApiRepoBase _apihelpdesk;
         private ObservableCollection<ListViewItem> _emailList = new ObservableCollection<ListViewItem>();
         public MainWindow()
@@ -27,7 +29,7 @@ namespace emailpipe
             _apihelpdesk = new OsTicket()
             {
                 ApiKey1 = "4A29909545187D793821BA05A99E2F99",
-                ApiPath = "http://your.tld/ticket/api/http.php/tickets.json",
+                ApiAdress = "http://your.tld/ticket/api/http.php/tickets.json",
             };
         }
 
@@ -45,9 +47,9 @@ namespace emailpipe
             _statusPage = new StatusPage();
             _statusPage.EmailListView.ItemsSource = _emailList;
 
-            MainFrame.SetValue(Grid.ColumnProperty, 1);
-            MainFrame.SetValue(Grid.RowProperty, 2);
-            MainFrame.NavigationUIVisibility = NavigationUIVisibility.Hidden;
+            //MainFrame.SetValue(Grid.ColumnProperty, 1);
+            //MainFrame.SetValue(Grid.RowProperty, 2);
+            //MainFrame.NavigationUIVisibility = NavigationUIVisibility.Hidden;
 
             _settingsPage = new SettingsPage();
 
@@ -117,32 +119,17 @@ namespace emailpipe
 
             grid.SetValue(Grid.RowProperty, 2);
 
-
             var statusButton = new Button {Content = "Status"};
             statusButton.SetValue(Grid.RowProperty, 1);
             statusButton.SetValue(Grid.ColumnProperty, 1);
             statusButton.Click += StatusButton_Click;
-
-            var resendToIntegrationButton = new Button
-            {
-                Content = new TextBlock {Text = "Upload to integration", TextWrapping = TextWrapping.Wrap}
-            };
-            resendToIntegrationButton.SetValue(Grid.RowSpanProperty, 2);
-            resendToIntegrationButton.SetValue(Grid.RowProperty, 2);
-            resendToIntegrationButton.SetValue(Grid.ColumnProperty, 1);
-
-            var clearButton = new Button {Content = "Clear list"};
-            clearButton.SetValue(Grid.RowProperty, 9);
-            clearButton.SetValue(Grid.ColumnProperty, 1);
 
             var settingsButton = new Button {Content = "Settings"};
             settingsButton.SetValue(Grid.RowProperty, 8);
             settingsButton.SetValue(Grid.ColumnProperty, 1);
             settingsButton.Click += SettingsButton_Click;
 
-            grid.Children.Add(resendToIntegrationButton);
             grid.Children.Add(statusButton);
-            //grid.Children.Add(clearButton);
             grid.Children.Add(settingsButton);
 
             MainGrid.Children.Add(grid);
@@ -160,12 +147,24 @@ namespace emailpipe
 
         private void LoadStatusWindow()
         {
-            MainFrame.Navigate(_statusPage?.GenerateContent());
+            RemoveActiveElement();
+
+            _activeUiElement = _statusPage.GenerateContent();
+            MainGrid.Children.Add(_activeUiElement);
         }
 
         private void LoadSettingsWindow()
         {
-            MainFrame.Navigate(_settingsPage?.GenerateContent());
+            RemoveActiveElement();
+
+            _activeUiElement = _settingsPage.GenerateContent();
+            MainGrid.Children.Add(_activeUiElement);
+        }
+
+        private void RemoveActiveElement()
+        {
+            if (_activeUiElement != null)
+                MainGrid.Children.Remove(_activeUiElement);
         }
 
         private void StartListen()

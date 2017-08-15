@@ -73,6 +73,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="IPage.cs" />
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="SettingsPage.cs" />
     <Compile Include="StatusPage.cs" />
     <Page Include="MainWindow.xaml">
