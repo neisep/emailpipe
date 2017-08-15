@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Navigation;
 
 namespace emailpipe
 {
@@ -14,6 +15,9 @@ namespace emailpipe
     /// </summary>
     public partial class MainWindow
     {
+        private StatusPage _statusPage;
+        private SettingsPage _settingsPage;
+
         private readonly ApiRepoBase _apihelpdesk;
         private ObservableCollection<ListViewItem> _emailList = new ObservableCollection<ListViewItem>();
         public MainWindow()
@@ -36,18 +40,18 @@ namespace emailpipe
             MainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(30, GridUnitType.Star) });
             MainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100, GridUnitType.Star) });
 
-            //MainGrid.Background = Brushes.Black;
-
-            GridView gridView = new GridView();
-            gridView.Columns.Add(new GridViewColumn { Header = "Subject", Width = 250, DisplayMemberBinding = new Binding("Subject") });
-            gridView.Columns.Add(new GridViewColumn { Header = "Date", Width = 80, DisplayMemberBinding = new Binding("Date") });
-
-            EmailListView.SetValue(Grid.ColumnProperty, 1);
-            EmailListView.SetValue(Grid.RowProperty, 2);
-            EmailListView.View = gridView;
-            EmailListView.ItemsSource = _emailList;
             StartListen();
-            EmailListView.Opacity = 0.7;
+
+            _statusPage = new StatusPage();
+            _statusPage.EmailListView.ItemsSource = _emailList;
+
+            MainFrame.SetValue(Grid.ColumnProperty, 1);
+            MainFrame.SetValue(Grid.RowProperty, 2);
+            MainFrame.NavigationUIVisibility = NavigationUIVisibility.Hidden;
+
+            _settingsPage = new SettingsPage();
+
+            LoadStatusWindow();
 
             _emailList.CollectionChanged += _emailList_CollectionChanged;
 
@@ -114,9 +118,10 @@ namespace emailpipe
             grid.SetValue(Grid.RowProperty, 2);
 
 
-            var refreshButton = new Button {Content = "Refresh list"};
-            refreshButton.SetValue(Grid.RowProperty, 1);
-            refreshButton.SetValue(Grid.ColumnProperty, 1);
+            var statusButton = new Button {Content = "Status"};
+            statusButton.SetValue(Grid.RowProperty, 1);
+            statusButton.SetValue(Grid.ColumnProperty, 1);
+            statusButton.Click += StatusButton_Click;
 
             var resendToIntegrationButton = new Button
             {
@@ -133,20 +138,41 @@ namespace emailpipe
             var settingsButton = new Button {Content = "Settings"};
             settingsButton.SetValue(Grid.RowProperty, 8);
             settingsButton.SetValue(Grid.ColumnProperty, 1);
+            settingsButton.Click += SettingsButton_Click;
 
             grid.Children.Add(resendToIntegrationButton);
-            grid.Children.Add(refreshButton);
-            grid.Children.Add(clearButton);
+            grid.Children.Add(statusButton);
+            //grid.Children.Add(clearButton);
             grid.Children.Add(settingsButton);
 
             MainGrid.Children.Add(grid);
         }
 
+        private void StatusButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoadStatusWindow();
+        }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoadSettingsWindow();
+        }
+
+        private void LoadStatusWindow()
+        {
+            MainFrame.Navigate(_statusPage?.GenerateContent());
+        }
+
+        private void LoadSettingsWindow()
+        {
+            MainFrame.Navigate(_settingsPage?.GenerateContent());
+        }
+
         private void StartListen()
         {
-            var imap = new Imap("localhost", 143, "test@your.tld", "blablabla", _emailList);
-            imap.StartMailManager(imap, _apihelpdesk);
-            imap.Listen();
+            //var imap = new Imap("localhost", 143, "test@your.tld", "blablabla", _emailList);
+            //imap.StartMailManager(imap, _apihelpdesk);
+            //imap.Listen();
 
         }
     }

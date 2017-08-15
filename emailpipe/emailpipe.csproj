@@ -72,12 +72,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="IPage.cs" />
+    <Compile Include="SettingsPage.cs" />
+    <Compile Include="StatusPage.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="ApiRepo\ApiRepoBase.cs" />
-    <Compile Include="ApiRepo\IApiRepo.cs" />
+    <Compile Include="ApiRepo\interface\IApiRepo.cs" />
     <Compile Include="ApiRepo\katak.cs" />
     <Compile Include="ApiRepo\OsTicket.cs" />
     <Compile Include="App.xaml.cs">

@@ -9,9 +9,7 @@
         ContentRendered="Window_ContentRendered"
         Title="Emailpipe" Height="350" Width="525">
     <Grid x:Name="MainGrid">
-        
-        <ListView x:Name="EmailListView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        </ListView>
-
+        <Frame x:Name="MainFrame">
+        </Frame>
     </Grid>
 </Window>
