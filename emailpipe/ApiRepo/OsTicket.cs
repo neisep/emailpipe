@@ -19,12 +19,14 @@ namespace emailpipe.ApiRepo
         {
             try
             {
-                var client = new WebClient() { Encoding = System.Text.Encoding.UTF8 };
-                client.Headers.Add("X-API-Key", ApiKey1);
-                client.Headers.Add("Expect", string.Empty);
-                client.Headers.Add("User-Agent", "emailPipe");
+                using (var client = new WebClient() {Encoding = System.Text.Encoding.UTF8})
+                {
+                    client.Headers.Add("X-API-Key", ApiKey1);
+                    client.Headers.Add("Expect", string.Empty);
+                    client.Headers.Add("User-Agent", "emailPipe");
 
-                client.UploadString(ApiAdress, "POST", CreateTicketJSON(eml));
+                    client.UploadString(ApiAdress, "POST", CreateTicketJSON(eml));
+                }
             }
             catch(Exception ex)
             {
