@@ -2,11 +2,11 @@
 using MimeKit;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Media;
-using System.Windows.Navigation;
+using emailpipe.Models;
 
 namespace emailpipe
 {
@@ -15,22 +15,32 @@ namespace emailpipe
     /// </summary>
     public partial class MainWindow
     {
+        private byte[] _key;
         private StatusPage _statusPage;
         private SettingsPage _settingsPage;
 
         private UIElement _activeUiElement;
 
-        private readonly ApiRepoBase _apihelpdesk;
+        private ApiRepoBase _apihelpdesk;
         private ObservableCollection<ListViewItem> _emailList = new ObservableCollection<ListViewItem>();
         public MainWindow()
         {
             InitializeComponent();
 
-            _apihelpdesk = new OsTicket()
-            {
-                ApiKey1 = "4A29909545187D793821BA05A99E2F99",
-                ApiAdress = "http://your.tld/ticket/api/http.php/tickets.json",
-            };
+            CreateKeyFile();
+            LoadKeyFile();
+        }
+
+        private void CreateKeyFile()
+        {
+            if(!File.Exists("ashibashi.nei"))
+                File.WriteAllBytes("ashibashi.nei", AESGCM.NewKey());
+        }
+
+        private void LoadKeyFile()
+        {
+            if (File.Exists("ashibashi.nei"))
+                _key = File.ReadAllBytes("ashibashi.nei");
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -42,16 +52,16 @@ namespace emailpipe
             MainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(30, GridUnitType.Star) });
             MainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100, GridUnitType.Star) });
 
+            
+
+            _statusPage = new StatusPage {EmailListView = {ItemsSource = _emailList}};
+
+            _settingsPage = new SettingsPage(_key);
+
+            if (_settingsPage.Settings != null)
+                LoadApi();
+
             StartListen();
-
-            _statusPage = new StatusPage();
-            _statusPage.EmailListView.ItemsSource = _emailList;
-
-            //MainFrame.SetValue(Grid.ColumnProperty, 1);
-            //MainFrame.SetValue(Grid.RowProperty, 2);
-            //MainFrame.NavigationUIVisibility = NavigationUIVisibility.Hidden;
-
-            _settingsPage = new SettingsPage();
 
             LoadStatusWindow();
 
@@ -65,6 +75,25 @@ namespace emailpipe
             MainGrid.Children.Add(borderCanvas);
 
             AddControllerButtons();
+        }
+
+        private void LoadApi()
+        {
+            switch (_settingsPage.Settings.Type)
+                {
+                    case Settings.ApiTypes.osTicket:
+                    {
+                        _apihelpdesk = new OsTicket
+                        {
+                            ApiAdress = _settingsPage.Settings.ApiAdress,
+                            ApiKey1 = _settingsPage.Settings.ApiKey
+                        };
+                    }
+                        break;
+                    case Settings.ApiTypes.katak:
+                        throw new NotImplementedException("Implementation for Katak Support is missing!");
+                        //break;
+                }
         }
 
         private void _emailList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -169,10 +198,12 @@ namespace emailpipe
 
         private void StartListen()
         {
-            //var imap = new Imap("localhost", 143, "test@your.tld", "blablabla", _emailList);
-            //imap.StartMailManager(imap, _apihelpdesk);
-            //imap.Listen();
-
+            if (_settingsPage.Settings != null)
+            {
+                var imap = new Imap(_settingsPage.Settings.EmailServerAdress, 143, AESGCM.SimpleDecrypt(_settingsPage.Settings.Email, _key), AESGCM.SimpleDecrypt(_settingsPage.Settings.Password, _key), _emailList);
+                imap.StartMailManager(imap, _apihelpdesk);
+                imap.Listen();
+            }
         }
     }
 }

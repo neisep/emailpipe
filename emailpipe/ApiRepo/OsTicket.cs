@@ -1,11 +1,9 @@
-﻿using emailpipe.Helper;
-using MimeKit;
+﻿using MimeKit;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Linq;
-using System.Web;
 
 namespace emailpipe.ApiRepo
 {
@@ -14,10 +12,6 @@ namespace emailpipe.ApiRepo
         public override string ApiKey1 { get; set; }
 
         public override string ApiKey2 { get; set; }
-
-        public override string ApiKey3 { get; set; }
-
-        public override string ApiKey4 { get; set; }
 
         public override string ApiAdress { get; set; }
 

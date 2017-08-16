@@ -7,8 +7,6 @@ namespace emailpipe.ApiRepo
         public abstract string ApiAdress { get; set; }
         public abstract string ApiKey1 { get; set; }
         public abstract string ApiKey2 { get; set; }
-        public abstract string ApiKey3 { get; set; }
-        public abstract string ApiKey4 { get; set; }
 
         public abstract void AddnewTicket(MimeMessage eml);
         public abstract void CloseTicket(MimeMessage eml);

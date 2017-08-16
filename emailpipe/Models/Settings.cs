@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace emailpipe.Models
 {
     public class Settings
@@ -13,5 +8,12 @@ namespace emailpipe.Models
         public string Email { get; set; }
         public string Password { get; set; } //TODO ADD ENCRYPTION
         public string EmailServerAdress { get; set; }
+        public ApiTypes Type { get; set; }
+
+        public enum ApiTypes
+        {
+            osTicket = 0,
+            katak = 1,
+        }
     }
 }

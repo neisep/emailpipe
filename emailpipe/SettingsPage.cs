@@ -1,9 +1,7 @@
 ﻿using emailpipe.Models;
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Newtonsoft.Json;
@@ -13,7 +11,8 @@ namespace emailpipe
     public class SettingsPage : IPage
     {
         private Grid _mainGrid;
-        private Settings _settings;
+        public Settings Settings { get; private set; }
+        private byte[] _key;
 
         private ComboBox _apiselectComboBox;
         private TextBox _txtBoxApiKey;
@@ -22,12 +21,14 @@ namespace emailpipe
         private TextBox _txtBoxMailPassword;
         private TextBox _txtBoxMailServerAdress;
 
-        public SettingsPage()
+        public SettingsPage(byte[] keyBytes)
         {
+            _key = keyBytes;
             _mainGrid = new Grid();
             _mainGrid.SetValue(Grid.ColumnProperty, 1);
             _mainGrid.SetValue(Grid.RowProperty, 2);
-            _settings = new Settings();
+            Settings = new Settings();
+            LoadFromFile();
         }
 
         public FrameworkElement GenerateContent()
@@ -49,7 +50,7 @@ namespace emailpipe
 
             _apiselectComboBox = new ComboBox();
             _apiselectComboBox.SetValue(Grid.ColumnProperty, 2);
-            _apiselectComboBox.Items.Add("OsTicket");
+            _apiselectComboBox.ItemsSource = Enum.GetValues(typeof(Settings.ApiTypes)).Cast<Settings.ApiTypes>();
 
             var txtApiKeyLabel = new Label { Content = "Api key:" };
             txtApiKeyLabel.SetValue(Grid.ColumnProperty, 1);
@@ -58,7 +59,7 @@ namespace emailpipe
             _txtBoxApiKey.SetValue(Grid.ColumnProperty, 2);
             _txtBoxApiKey.SetValue(Grid.RowProperty, 1);
 
-            var txtApiAdressLabel = new Label { Content = "Adress:" };
+            var txtApiAdressLabel = new Label { Content = "Adress:(=>tickets.json)" };
             txtApiAdressLabel.SetValue(Grid.ColumnProperty, 1);
             txtApiAdressLabel.SetValue(Grid.RowProperty, 2);
             _txtBoxApiAdress = new TextBox();
@@ -91,6 +92,7 @@ namespace emailpipe
             saveSettingsButton.SetValue(Grid.RowProperty, 8);
             saveSettingsButton.HorizontalAlignment = HorizontalAlignment.Right;
             saveSettingsButton.MinWidth = 100;
+            saveSettingsButton.Click += SaveSettingsButton_Click;
 
             _mainGrid.Children.Add(txtApiModeLabel);
             _mainGrid.Children.Add(_apiselectComboBox);
@@ -106,26 +108,69 @@ namespace emailpipe
             _mainGrid.Children.Add(_txtBoxMailServerAdress);
             _mainGrid.Children.Add(saveSettingsButton);
 
+            PopulateDataFields();
+
             return _mainGrid;
+        }
+
+        private void PopulateDataFields()
+        {
+            try
+            {
+                if (Settings == null)
+                    return;
+
+                _apiselectComboBox.SelectedIndex = Convert.ToInt32(Settings.Type);
+
+                _txtBoxApiAdress.Text = Settings.ApiAdress;
+                _txtBoxApiKey.Text = Settings.ApiKey;
+                _txtBoxMailadress.Text = AESGCM.SimpleDecrypt(Settings.Email, _key);
+                _txtBoxMailPassword.Text = AESGCM.SimpleDecrypt(Settings.Password, _key);
+                _txtBoxMailServerAdress.Text = Settings.EmailServerAdress;
+            }
+            catch (Exception)
+            {
+                
+            }
+        }
+
+        private void SaveSettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveToFile();
         }
 
         public void SaveToFile()
         {
-            if (string.IsNullOrEmpty(_settings.ApiAdress) || string.IsNullOrEmpty(_settings.ApiKey))
+            try
             {
-                _settings.ApiAdress = _txtBoxApiAdress.Text;
-                _settings.ApiKey = _txtBoxApiKey.Text;
-                _settings.Email = _txtBoxMailadress.Text;
-                _settings.Password = _txtBoxMailPassword.Text;
-                _settings.EmailServerAdress = _txtBoxMailServerAdress.Text;
-            }
 
-            var json = JsonConvert.SerializeObject(_settings);
+                Settings.ApiAdress = _txtBoxApiAdress.Text;
+                Settings.ApiKey = _txtBoxApiKey.Text;
+                Settings.Email = AESGCM.SimpleEncrypt(_txtBoxMailadress.Text, _key);
+                Settings.Password = AESGCM.SimpleEncrypt(_txtBoxMailPassword.Text, _key);
+                Settings.EmailServerAdress = _txtBoxMailServerAdress.Text;
+                Settings.Type = (Settings.ApiTypes) Enum.Parse(typeof(Settings.ApiTypes),
+                    Enum.GetName(typeof(Settings.ApiTypes), _apiselectComboBox.SelectedIndex));
+
+                var json = JsonConvert.SerializeObject(Settings);
+
+                File.WriteAllText("settings.json", json);
+            }
+            catch (Exception)
+            {
+                
+            }
         }
 
         public void LoadFromFile()
         {
-            
+            if (!File.Exists("settings.json"))
+                return;
+
+            var textFile = File.ReadAllText("settings.json");
+            var json = JsonConvert.DeserializeObject<Settings>(textFile);
+
+            Settings = json;
         }
     }
 }

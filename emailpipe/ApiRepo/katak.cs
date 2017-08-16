@@ -12,10 +12,6 @@ namespace emailpipe.ApiRepo
 
         public override string ApiKey2 { get; set; }
 
-        public override string ApiKey3 { get; set; }
-
-        public override string ApiKey4 { get; set; }
-
         public override string ApiAdress { get; set; }
 
         public override void AddnewTicket(MimeMessage eml)
