@@ -8,6 +8,7 @@ using MailKit.Net.Imap;
 using MailKit;
 using System.Threading;
 using System.Linq;
+using System.Text;
 using emailpipe.Helper;
 using emailpipe.ApiRepo;
 using MimeKit;
@@ -40,22 +41,22 @@ namespace emailpipe
             _mailManager = new MailManager(_observableCollectionEmails, imap);
         }
 
-        public void Listen()
+        public void Listen(StringBuilder statusText)
         {
-            var imapFetchTask = ImapTask(ImapType.Fetch, _mailManager);
-            var imapIdleTask = ImapTask(ImapType.Idle, _mailManager);
+            var imapFetchTask = ImapTask(ImapType.Fetch, _mailManager, statusText);
+            var imapIdleTask = ImapTask(ImapType.Idle, _mailManager, statusText);
 
             imapIdleTask.Start();
             imapFetchTask.Start();
         }
 
-        public void FetchNewMail()
+        public void FetchNewMail(StringBuilder statusText)
         {
-            var imapFetchTask = ImapTask(ImapType.Fetch, _mailManager);
+            var imapFetchTask = ImapTask(ImapType.Fetch, _mailManager, statusText);
             imapFetchTask.Start();
         }
 
-        public Task ImapTask(ImapType imapType, MailManager mailManager)
+        public Task ImapTask(ImapType imapType, MailManager mailManager, StringBuilder statusText)
         {
             return new Task(() =>
             {
@@ -68,6 +69,9 @@ namespace emailpipe
 
                         imapClient.Connect(_ip, _port, MailKit.Security.SecureSocketOptions.None);
                         imapClient.Authenticate(_username, _password);
+
+                        statusText.Clear();
+                        statusText.Append("Status: Connected");
 
                         var inbox = imapClient.Inbox;
                         inbox.Open(FolderAccess.ReadOnly);
@@ -88,7 +92,7 @@ namespace emailpipe
                                 break;
                             case ImapType.Idle:
                             {
-                                var imapIdle = new ImapIdle(imapClient, _mailManager);
+                                var imapIdle = new ImapIdle(imapClient, _mailManager, statusText);
                                 imapIdle.Listen();
 
                                 while (imapClient.IsConnected)

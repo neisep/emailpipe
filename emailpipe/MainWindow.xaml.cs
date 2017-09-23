@@ -3,8 +3,12 @@ using MimeKit;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Net.Mime;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Media;
 using emailpipe.Models;
 
@@ -18,6 +22,7 @@ namespace emailpipe
         private byte[] _key;
         private StatusPage _statusPage;
         private SettingsPage _settingsPage;
+        private StringBuilder _statusText;
 
         private UIElement _activeUiElement;
 
@@ -29,6 +34,8 @@ namespace emailpipe
 
             CreateKeyFile();
             LoadKeyFile();
+            _statusText = new StringBuilder();
+            _statusText.Append("Status: Not connected");
         }
 
         private void CreateKeyFile()
@@ -48,6 +55,7 @@ namespace emailpipe
             MainGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(10, GridUnitType.Star) });
             MainGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(10, GridUnitType.Star) });
             MainGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(100, GridUnitType.Star) });
+            MainGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(10, GridUnitType.Star) });
 
             MainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(30, GridUnitType.Star) });
             MainGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100, GridUnitType.Star) });
@@ -61,8 +69,6 @@ namespace emailpipe
             if (_settingsPage.Settings != null)
                 LoadApi();
 
-            StartListen();
-
             LoadStatusWindow();
 
             _emailList.CollectionChanged += _emailList_CollectionChanged;
@@ -75,6 +81,12 @@ namespace emailpipe
             MainGrid.Children.Add(borderCanvas);
 
             AddControllerButtons();
+
+            var statusText = new TextBlock();
+            statusText.SetValue(Grid.RowProperty, 3);
+            statusText.VerticalAlignment = VerticalAlignment.Bottom;
+
+            MainGrid.Children.Add(statusText);
         }
 
         private void LoadApi()
@@ -143,13 +155,16 @@ namespace emailpipe
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50, GridUnitType.Star) });
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50, GridUnitType.Star) });
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50, GridUnitType.Star) });
-            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50, GridUnitType.Star) });
-            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(50, GridUnitType.Star) });
 
             grid.SetValue(Grid.RowProperty, 2);
 
+            var startButton = new Button {Content = "Start"};
+            startButton.SetValue(Grid.RowProperty, 0);
+            startButton.SetValue(Grid.ColumnProperty, 1);
+            startButton.Click += StartButton_Click;
+
             var statusButton = new Button {Content = "Status"};
-            statusButton.SetValue(Grid.RowProperty, 1);
+            statusButton.SetValue(Grid.RowProperty, 2);
             statusButton.SetValue(Grid.ColumnProperty, 1);
             statusButton.Click += StatusButton_Click;
 
@@ -158,10 +173,16 @@ namespace emailpipe
             settingsButton.SetValue(Grid.ColumnProperty, 1);
             settingsButton.Click += SettingsButton_Click;
 
+            grid.Children.Add(startButton);
             grid.Children.Add(statusButton);
             grid.Children.Add(settingsButton);
 
             MainGrid.Children.Add(grid);
+        }
+
+        private void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+            StartListen();
         }
 
         private void StatusButton_Click(object sender, RoutedEventArgs e)
@@ -202,7 +223,7 @@ namespace emailpipe
             {
                 var imap = new Imap(_settingsPage.Settings.EmailServerAdress, 143, AESGCM.SimpleDecrypt(_settingsPage.Settings.Email, _key), AESGCM.SimpleDecrypt(_settingsPage.Settings.Password, _key), _emailList);
                 imap.StartMailManager(imap, _apihelpdesk);
-                imap.Listen();
+                imap.Listen(_statusText);
             }
         }
     }

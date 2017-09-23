@@ -1,5 +1,6 @@
 ﻿using MailKit.Net.Imap;
 using System;
+using System.Text;
 using System.Threading;
 
 namespace emailpipe
@@ -8,10 +9,12 @@ namespace emailpipe
     {
         private readonly ImapClient _imapClient;
         private readonly MailManager _mailManager;
-        public ImapIdle(ImapClient imapClient, MailManager mailManager)
+        private StringBuilder _statusText;
+        public ImapIdle(ImapClient imapClient, MailManager mailManager, StringBuilder statusText)
         {
             _imapClient = imapClient;
             _mailManager = mailManager;
+            _statusText = statusText;
         }
         
         //TODO IF Idle is not supported we should maybe send Noop command... then it could act almost like Idle.
@@ -41,7 +44,7 @@ namespace emailpipe
         private void Inbox_MessagesArrived(object sender, MailKit.MessagesArrivedEventArgs e)
         {
             //TODO ADD SOME KIND OF METHOD TO QUE UP MAIL BECAUSE IT WILL MOST PROBOBLY FAIL TO MAKE 2098945 millions connection at the same time.
-            _mailManager.NewMessageSignal(_imapClient);
+            _mailManager.NewMessageSignal(_imapClient, _statusText);
         }
     }
 }

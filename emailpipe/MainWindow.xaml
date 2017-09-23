@@ -8,6 +8,5 @@
         WindowStartupLocation="CenterScreen"
         ContentRendered="Window_ContentRendered"
         Title="Emailpipe" Height="350" Width="600">
-    <Grid x:Name="MainGrid">
-    </Grid>
+    <Grid x:Name="MainGrid"/>
 </Window>

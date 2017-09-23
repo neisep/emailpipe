@@ -56,7 +56,7 @@ namespace emailpipe.ApiRepo
             }
 
             jsonList.Add("name", name);
-            jsonList.Add("email", eml.From.First().ToString());
+            jsonList.Add("email", eml.From.Mailboxes.First().Address);
             jsonList.Add("source", "API");
             jsonList.Add("subject", eml.Subject);
             jsonList.Add("message", eml.TextBody.Trim());

@@ -3,6 +3,7 @@ using MimeKit;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 
 namespace emailpipe
 {
@@ -34,9 +35,9 @@ namespace emailpipe
         /// <summary>
         /// Signal from ImapIdle Client lets start task to fetch new email with new connection.
         /// </summary>
-        public void NewMessageSignal(ImapClient imapClient)
+        public void NewMessageSignal(ImapClient imapClient, StringBuilder statusText)
         {
-                _imap?.FetchNewMail();
+                _imap?.FetchNewMail(statusText);
         }
     }
 }
