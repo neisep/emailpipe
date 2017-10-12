@@ -158,17 +158,31 @@ namespace emailpipe
 
             grid.SetValue(Grid.RowProperty, 2);
 
-            var startButton = new Button {Content = "Start"};
+            TextBlock startText = new TextBlock();
+            startText.FontFamily = FindResource("FontAwesome") as FontFamily;
+            startText.Text = "\uf011 Start";
+
+            var startButton = new Button {Content = startText };
             startButton.SetValue(Grid.RowProperty, 0);
             startButton.SetValue(Grid.ColumnProperty, 1);
             startButton.Click += StartButton_Click;
 
-            var statusButton = new Button {Content = "Status"};
+            TextBlock statusText = new TextBlock();
+            statusText.FontFamily = FindResource("FontAwesome") as FontFamily;
+            statusText.Text = "\uf0ae Status";
+
+            var statusButton = new Button {Content = statusText};
             statusButton.SetValue(Grid.RowProperty, 2);
             statusButton.SetValue(Grid.ColumnProperty, 1);
             statusButton.Click += StatusButton_Click;
 
-            var settingsButton = new Button {Content = "Settings"};
+            //< TextBlock x: Name = "tbFontAwesome" Text = "&#xf011;" FontFamily = "{StaticResource FontAwesome}" Foreground = "Gray" FontSize = "32" Margin = "10" VerticalAlignment = "Center" />
+            //              f085
+            TextBlock cog = new TextBlock();
+            cog.FontFamily = FindResource("FontAwesome") as FontFamily;
+            cog.Text = "\uf085 Settings";
+
+            var settingsButton = new Button {Content = cog };
             settingsButton.SetValue(Grid.RowProperty, 8);
             settingsButton.SetValue(Grid.ColumnProperty, 1);
             settingsButton.Click += SettingsButton_Click;
