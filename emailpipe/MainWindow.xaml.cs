@@ -23,6 +23,7 @@ namespace emailpipe
         private StatusPage _statusPage;
         private SettingsPage _settingsPage;
         private StringBuilder _statusText;
+        private bool _listen;
 
         private UIElement _activeUiElement;
 
@@ -233,11 +234,12 @@ namespace emailpipe
 
         private void StartListen()
         {
-            if (_settingsPage.Settings != null)
+            if (_settingsPage.Settings != null && !_listen)
             {
                 var imap = new Imap(_settingsPage.Settings.EmailServerAdress, 143, AESGCM.SimpleDecrypt(_settingsPage.Settings.Email, _key), AESGCM.SimpleDecrypt(_settingsPage.Settings.Password, _key), _emailList);
                 imap.StartMailManager(imap, _apihelpdesk);
                 imap.Listen(_statusText);
+                _listen = true;
             }
         }
     }
