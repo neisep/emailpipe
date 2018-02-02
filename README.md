@@ -5,11 +5,11 @@
 An email pipe for Support desk.
 
 
-This will be for Support ticket system a little neat helper that will pipe email directly too API instead of
-polling email 5 or 10 minutes this tool do it instant.
+This will be for Support ticket system a little neat helper that will forward email directly too API instead of
+polling email 10 minutes this tool fix it instantly.
 
 In future it should work with OsTicket and Katak
 
 Unfortantly we are still in testing mode and the code for now is really messed up.
 
-RIGHT NOW DO NOT USE THIS PROJECT IT IS NOT FINISH AND PROBOBLY NOT WORKING !
+Notice do not run or use unless you know how to write code in C# because you will most probobly need it, this code is incomplete, and will over time most probobly change a lot.
