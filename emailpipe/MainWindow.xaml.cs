@@ -42,7 +42,7 @@ namespace emailpipe
         private void CreateKeyFile()
         {
             if(!File.Exists("ashibashi.nei"))
-                File.WriteAllBytes("ashibashi.nei", AESGCM.NewKey());
+                File.WriteAllBytes("ashibashi.nei", crypto.AESGCM.NewKey());
         }
 
         private void LoadKeyFile()

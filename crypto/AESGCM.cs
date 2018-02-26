@@ -15,7 +15,7 @@ using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
 
-namespace emailpipe
+namespace crypto
 {
 
     public static class AESGCM
