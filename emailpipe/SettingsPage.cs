@@ -4,7 +4,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Newtonsoft.Json;
-using Shared.Models;
+using Emailpipe.Common.Models;
+using Emailpipe.Crypto;
 
 namespace emailpipe
 {

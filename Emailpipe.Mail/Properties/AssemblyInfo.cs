@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("api.core")]
+[assembly: AssemblyTitle("Emailpipe.Mail")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("api.core")]
+[assembly: AssemblyProduct("Emailpipe.Mail")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("754c8758-e4da-4f42-87be-1cf7662b1d8e")]
+[assembly: Guid("d15a4db3-6dfe-4cc2-bac6-2f25cd370988")]
 
 // Version information for an assembly consists of the following four values:
 //

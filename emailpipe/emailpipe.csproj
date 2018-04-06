@@ -98,6 +98,8 @@
     <Compile Include="DatabaseRepo\Interface\IDatabase.cs" />
     <Compile Include="DatabaseRepo\sqlite.cs" />
     <Compile Include="IPage.cs" />
+    <Compile Include="MailMessage.cs" />
+    <Compile Include="MessageInfo.cs" />
     <Compile Include="SettingsPage.cs" />
     <Compile Include="StatusPage.cs" />
     <Page Include="MainWindow.xaml">
@@ -152,13 +154,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\crypto\crypto.csproj">
-      <Project>{8bd2a92c-c703-463e-9977-9e1ae012d6cd}</Project>
-      <Name>crypto</Name>
+    <ProjectReference Include="..\Emailpipe.Api\Emailpipe.Api.csproj">
+      <Project>{2d62c167-db13-4991-b452-8ce42bbe8520}</Project>
+      <Name>Emailpipe.Api</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Shared\Shared.csproj">
-      <Project>{d1209027-9e38-4a9b-b223-8656b7744160}</Project>
-      <Name>Shared</Name>
+    <ProjectReference Include="..\Emailpipe.Common\Emailpipe.Common.csproj">
+      <Project>{14a1969c-a5b8-4506-afe1-f264c73e556a}</Project>
+      <Name>Emailpipe.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

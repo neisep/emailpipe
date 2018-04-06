@@ -12,6 +12,7 @@ using System.Text;
 using emailpipe.Helper;
 using emailpipe.ApiRepo;
 using MimeKit;
+using Emailpipe.Api.Interfaces;
 
 namespace emailpipe
 {
@@ -36,7 +37,8 @@ namespace emailpipe
             _observableCollectionEmails.CollectionChanged += _observableCollectionEmails_CollectionChanged;
         }
 
-        public void StartMailManager(Imap imap, ApiRepoBase apihelpdesk)
+        //TODO CHECK WHY apihelpdesk is here ???
+        public void StartMailManager(Imap imap, Iapi apihelpdesk)
         {
             _mailManager = new MailManager(_observableCollectionEmails, imap);
         }

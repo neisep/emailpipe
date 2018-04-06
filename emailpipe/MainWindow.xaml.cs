@@ -1,5 +1,4 @@
-﻿using emailpipe.ApiRepo;
-using MimeKit;
+﻿using MimeKit;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -10,7 +9,10 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
-using emailpipe.Models;
+using Emailpipe.Common.Models;
+using Emailpipe.Crypto;
+using Emailpipe.Api.Interfaces;
+using Emailpipe.Api;
 
 namespace emailpipe
 {
@@ -27,7 +29,7 @@ namespace emailpipe
 
         private UIElement _activeUiElement;
 
-        private ApiRepoBase _apihelpdesk;
+        private Iapi _apihelpdesk;
         private ObservableCollection<ListViewItem> _emailList = new ObservableCollection<ListViewItem>();
         public MainWindow()
         {
@@ -42,7 +44,7 @@ namespace emailpipe
         private void CreateKeyFile()
         {
             if(!File.Exists("ashibashi.nei"))
-                File.WriteAllBytes("ashibashi.nei", crypto.AESGCM.NewKey());
+                File.WriteAllBytes("ashibashi.nei", AESGCM.NewKey());
         }
 
         private void LoadKeyFile()
@@ -125,7 +127,11 @@ namespace emailpipe
                             if (!(listViewItem?.Tag is MimeMessage))
                                 return;
 
-                            _apihelpdesk?.AddnewTicket((MimeMessage)listViewItem.Tag);
+                            //var message = MailMessage((MimeMessage)listViewItem.Tag);
+                            var message = new MailMessage((MimeMessage)listViewItem.Tag);
+
+
+                            _apihelpdesk?.AddnewTicket(message);
                         }
                         break;
                     }

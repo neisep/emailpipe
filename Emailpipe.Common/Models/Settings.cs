@@ -1,5 +1,5 @@
 ﻿
-namespace Shared.Models
+namespace Emailpipe.Common.Models
 {
     public class Settings
     {
