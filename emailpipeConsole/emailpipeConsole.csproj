@@ -53,5 +53,11 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Emailpipe.Common\Emailpipe.Common.csproj">
+      <Project>{14a1969c-a5b8-4506-afe1-f264c73e556a}</Project>
+      <Name>Emailpipe.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

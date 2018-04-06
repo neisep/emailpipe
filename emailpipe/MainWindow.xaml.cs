@@ -10,7 +10,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
 using Emailpipe.Common.Models;
-using Emailpipe.Crypto;
+using Emailpipe.Common;
 using Emailpipe.Api.Interfaces;
 using Emailpipe.Api;
 

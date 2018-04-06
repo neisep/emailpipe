@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using crypto;
-using Shared.Models;
+using Emailpipe.Common;
+using Emailpipe.Common.Models;
 using Newtonsoft.Json;
 
 namespace emailpipeConsole
@@ -43,7 +43,7 @@ namespace emailpipeConsole
         private void CreateKeyFile()
         {
             if (!File.Exists("ashibashi.nei"))
-                File.WriteAllBytes("ashibashi.nei", crypto.AESGCM.NewKey());
+                File.WriteAllBytes("ashibashi.nei", AESGCM.NewKey());
         }
 
         /// <summary>

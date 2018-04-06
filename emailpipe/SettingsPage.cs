@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Newtonsoft.Json;
 using Emailpipe.Common.Models;
-using Emailpipe.Crypto;
+using Emailpipe.Common;
 
 namespace emailpipe
 {
