@@ -26,7 +26,7 @@ namespace emailpipe
             try
             {
                 //Subscribe on events on our Inbox!
-                _imapClient.Inbox.MessagesArrived += Inbox_MessagesArrived;
+                _imapClient.Inbox.CountChanged += Inbox_CountChanged;
 
                 await _imapClient.IdleAsync(new CancellationTokenSource().Token); //TODO Make better use of CancelleationToken
             }
@@ -44,10 +44,16 @@ namespace emailpipe
             }
         }
 
-        private void Inbox_MessagesArrived(object sender, MailKit.MessagesArrivedEventArgs e)
+        private void Inbox_CountChanged(object sender, EventArgs e)
         {
             //TODO ADD SOME KIND OF METHOD TO QUE UP MAIL BECAUSE IT WILL MOST PROBOBLY FAIL TO MAKE 2098945 millions connection at the same time.
             _mailManager.NewMessageSignal(_imapClient, _statusText);
+        }
+
+        private void Inbox_MessagesArrived(object sender, MailKit.MessageEventArgs e)
+        {
+            //TODO ADD SOME KIND OF METHOD TO QUE UP MAIL BECAUSE IT WILL MOST PROBOBLY FAIL TO MAKE 2098945 millions connection at the same time.
+            //_mailManager.NewMessageSignal(_imapClient, _statusText);
         }
     }
 }
