@@ -1,4 +1,7 @@
-﻿using Emailpipe.Api.Interfaces;
+﻿//
+// Copyright (c) 2018 Jimmie Jönsson <jimmie@neisep.com>
+//
+using Emailpipe.Api.Interfaces;
 
 namespace Emailpipe.Api
 {

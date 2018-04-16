@@ -1,4 +1,7 @@
-﻿using MimeKit;
+﻿//
+// Copyright (c) 2018 Jimmie Jönsson <jimmie@neisep.com>
+//
+using MimeKit;
 
 namespace emailpipe.ApiRepo
 {

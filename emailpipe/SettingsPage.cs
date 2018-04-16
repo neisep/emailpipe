@@ -1,4 +1,7 @@
-﻿using System;
+﻿//
+// Copyright (c) 2018 Jimmie Jönsson <jimmie@neisep.com>
+//
+using System;
 using System.IO;
 using System.Linq;
 using System.Windows;

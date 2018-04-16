@@ -1,4 +1,7 @@
-﻿using MailKit.Net.Imap;
+﻿//
+// Copyright (c) 2018 Jimmie Jönsson <jimmie@neisep.com>
+//
+using MailKit.Net.Imap;
 using System;
 using System.Text;
 using System.Threading;

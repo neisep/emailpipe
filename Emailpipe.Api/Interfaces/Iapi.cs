@@ -1,4 +1,7 @@
-﻿using Emailpipe.Api.Interfaces;
+﻿//
+// Copyright (c) 2018 Jimmie Jönsson <jimmie@neisep.com>
+//
+using Emailpipe.Api.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

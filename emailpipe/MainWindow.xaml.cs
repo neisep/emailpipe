@@ -1,4 +1,7 @@
-﻿using MimeKit;
+﻿//
+// Copyright (c) 2018 Jimmie Jönsson <jimmie@neisep.com>
+//
+using MimeKit;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;

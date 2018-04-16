@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿//
+// Copyright (c) 2018 Jimmie Jönsson <jimmie@neisep.com>
+//
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 

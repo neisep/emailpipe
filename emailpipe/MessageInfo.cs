@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿//
+// Copyright (c) 2018 Jimmie Jönsson <jimmie@neisep.com>
+//
+using System.Collections.Generic;
 using Emailpipe.Api.Interfaces;
 using MimeKit;
 
