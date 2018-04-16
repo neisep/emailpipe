@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emailpipe.Mail.Test", "Emai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emailpipe.Api", "Emailpipe.Api\Emailpipe.Api.csproj", "{2D62C167-DB13-4991-B452-8CE42BBE8520}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emailpipe.Api.Test", "Emailpipe.Api.Test\Emailpipe.Api.Test.csproj", "{01B330E8-57BB-4731-96AA-31B6464A116A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emailpipe.Api.Test", "Emailpipe.Api.Test\Emailpipe.Api.Test.csproj", "{A476DF9D-28C3-4DC6-83F0-5469E22F07CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +47,10 @@ Global
 		{2D62C167-DB13-4991-B452-8CE42BBE8520}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D62C167-DB13-4991-B452-8CE42BBE8520}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D62C167-DB13-4991-B452-8CE42BBE8520}.Release|Any CPU.Build.0 = Release|Any CPU
-		{01B330E8-57BB-4731-96AA-31B6464A116A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{01B330E8-57BB-4731-96AA-31B6464A116A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{01B330E8-57BB-4731-96AA-31B6464A116A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{01B330E8-57BB-4731-96AA-31B6464A116A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A476DF9D-28C3-4DC6-83F0-5469E22F07CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A476DF9D-28C3-4DC6-83F0-5469E22F07CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A476DF9D-28C3-4DC6-83F0-5469E22F07CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A476DF9D-28C3-4DC6-83F0-5469E22F07CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

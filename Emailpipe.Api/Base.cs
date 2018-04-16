@@ -7,7 +7,7 @@ namespace Emailpipe.Api
 {
     public class Base : Iapi
     {
-        public string ApiKey1 { get; set; }
+        public string ApiKey { get; set; }
         public string ApiKey2 { get; set; }
         public string ApiAdress { get; set; }
 

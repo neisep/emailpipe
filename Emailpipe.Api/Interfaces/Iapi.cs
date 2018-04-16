@@ -12,8 +12,7 @@ namespace Emailpipe.Api.Interfaces
 {
     public interface Iapi
     {
-        string ApiKey1 { get; set; }
-        string ApiKey2 { get; set; }
+        string ApiKey { get; set; }
         string ApiAdress { get; set; }
         void AddnewTicket(IMailMessage message);
         void CloseTicket(IMailMessage message);

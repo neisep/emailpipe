@@ -11,26 +11,27 @@ namespace Emailpipe.Api.Interfaces
 {
     public interface IMailMessage
     {
-        IMessageInfo From { get; set; }
+        //IMessageInfo From { get; set; }
         // ICollection<IMessageInfo> Attachments { get; set; } //TODO FIX LATER
         // ICollection<IMessageInfo> BodyParts { get; set; } //TODO FIX LATER
 
-        string Subject { get; set; }
-        DateTimeOffset Date { get; set; }
+        //string Subject { get; set; }
+        //DateTimeOffset Date { get; set; }
 
-        string TextBody { get; set; }
+        //string TextBody { get; set; }
+        object MimeMessage { get; set; }
 
         /// <summary>
         /// Convert our mail to jsonString
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
-        string ConvertMailToJson(IMailMessage message);
+        string ConvertMailToJson();
     }
 
-    public interface IMessageInfo
-    {
-        string Name { get; set; }
-        ICollection<string> Mailboxes { get; set; }
-    }
+    //public interface IMessageInfo
+    //{
+    //    string Name { get; set; }
+    //    ICollection<string> Mailboxes { get; set; }
+    //}
 }

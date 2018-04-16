@@ -98,7 +98,6 @@
     <Compile Include="DatabaseRepo\Interface\IDatabase.cs" />
     <Compile Include="DatabaseRepo\sqlite.cs" />
     <Compile Include="IPage.cs" />
-    <Compile Include="MailMessage.cs" />
     <Compile Include="MessageInfo.cs" />
     <Compile Include="SettingsPage.cs" />
     <Compile Include="StatusPage.cs" />

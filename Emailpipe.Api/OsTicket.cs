@@ -10,8 +10,7 @@ namespace Emailpipe.Api
 {
     public class OsTicket : Iapi
     {
-        public string ApiKey1 { get; set; }
-        public string ApiKey2 { get; set; }
+        public string ApiKey { get; set; }
         public string ApiAdress { get; set; }
 
         public ICollection<IMailMessage> FailedMessages { get; set; }
@@ -20,13 +19,14 @@ namespace Emailpipe.Api
         {
             try
             {
+                FailedMessages = new List<IMailMessage>();
                 using (var client = new WebClient() { Encoding = System.Text.Encoding.UTF8 })
                 {
-                    client.Headers.Add("X-API-Key", ApiKey1);
+                    client.Headers.Add("X-API-Key", ApiKey);
                     client.Headers.Add("Expect", string.Empty);
                     client.Headers.Add("User-Agent", "emailPipe");
 
-                    client.UploadString(ApiAdress, "POST", message.ConvertMailToJson(message));
+                    client.UploadString(ApiAdress, "POST", message.ConvertMailToJson());
                 }
             }
             catch (Exception ex)

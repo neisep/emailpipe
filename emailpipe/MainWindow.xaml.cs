@@ -104,7 +104,7 @@ namespace emailpipe
                         _apihelpdesk = new OsTicket
                         {
                             ApiAdress = _settingsPage.Settings.ApiAdress,
-                            ApiKey1 = _settingsPage.Settings.ApiKey
+                            ApiKey = _settingsPage.Settings.ApiKey
                         };
                     }
                         break;
