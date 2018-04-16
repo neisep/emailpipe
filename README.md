@@ -1,6 +1,6 @@
 # emailpipe
 
-[![Build status](https://ci.appveyor.com/api/projects/status/3a23vfunofblcxh5?svg=true)](https://ci.appveyor.com/project/neisep/emailpipe) [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Build status](https://ci.appveyor.com/api/projects/status/3a23vfunofblcxh5?svg=true)](https://ci.appveyor.com/project/neisep/emailpipe) 
 
 An email pipe for Support desk.
 
