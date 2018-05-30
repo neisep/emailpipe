@@ -75,5 +75,11 @@ namespace Emailpipe.Api.Test
         {
             //TODO ADD ATTACHMENT MAIL HERE!
         }
+
+        [TestMethod]
+        public void PostMultipleEmailToApi()
+        {
+            //TODO ADD LOGIC HERE !
+        }
     }
 }
