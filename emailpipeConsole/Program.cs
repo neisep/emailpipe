@@ -17,7 +17,6 @@ namespace emailpipeConsole
             startup.Load();
             startup.Execute();
 
-
             Console.WriteLine("Running application");
             Console.ReadLine();
         }

@@ -1,0 +1,5 @@
+﻿Implement dependency injection
+Implement better tests for EmailPipe.Api
+Implement logging
+Implement Noop compability if idle is not supported by remote server
+Replace databaserepo with NHibernate

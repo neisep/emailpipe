@@ -12,6 +12,7 @@ using System.Collections.Generic;
 
 namespace Emailpipe.Api.Test
 {
+    //TODO LOOK INTO THIS BECAUSE THIS IS PROBOBLY SHIET PART OF IT SHOULD BE DAT TEST AND NOT UNIT TEST!
     [TestClass]
     public class UnitTestOsTicket
     {
