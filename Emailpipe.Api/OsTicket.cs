@@ -29,7 +29,9 @@ namespace Emailpipe.Api
                     client.UploadString(ApiAdress, "POST", message.ConvertMailToJson());
                 }
             }
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
             catch (Exception ex)
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
             {
                 //TODO ADD SOME KIND OF ERROR HANDLING!
                 FailedMessages.Add(message);

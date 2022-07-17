@@ -109,32 +109,48 @@ namespace emailpipe
                         }
                     }
                 }
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
                 catch (ServiceNotConnectedException ex)
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
                 {
                     //ImapClient not connected
                 }
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
                 catch (ServiceNotAuthenticatedException ex)
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
                 {
                     //ImapClient not Authenticated :(
                 }
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
                 catch (InvalidOperationException ex)
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
                 {
                     //May happen if the imapFolder was not opened
                 }
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
                 catch (NotSupportedException ex)
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
                 {
                     //Not so good since we kind of need it ;(
                 }
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
                 catch (IOException ex)
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
                 {
                 }
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
                 catch (ImapCommandException ex)
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
                 {
                 }
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
                 catch (ImapProtocolException ex)
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
                 {
                 }
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
                 catch (Exception ex)
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
                 {
                 }
             });
@@ -174,7 +190,9 @@ namespace emailpipe
                         break;
                 }
             }
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
             catch (Exception ex)
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
             {
                 //TODO Handle errors here!
             }

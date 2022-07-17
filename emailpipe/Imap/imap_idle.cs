@@ -30,15 +30,21 @@ namespace emailpipe
 
                 await _imapClient.IdleAsync(new CancellationTokenSource().Token); //TODO Make better use of CancelleationToken
             }
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
             catch (ArgumentException ex)
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
             {
                 //Some Weird issue happen maybe missing cancellation token or something :(
             }
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
             catch (ObjectDisposedException ex)
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
             {
                 //Should not be disposed thought.
             }
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
             catch (OperationCanceledException ex)
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
             {
                 //Operation was cancelled with Call
             }

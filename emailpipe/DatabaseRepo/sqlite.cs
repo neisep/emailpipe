@@ -32,7 +32,9 @@ namespace emailpipe.DatabaseRepo
                 _sqlConnection = new SQLiteConnection();
                 _sqlConnection.Open();
             }
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
             catch (SQLiteException ex)
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
             {
                 //TODO ADD ERROR HANDLING AND PROBOLBLY BETTER Exception more specific!
             }
